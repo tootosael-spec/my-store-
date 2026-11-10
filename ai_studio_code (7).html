@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#059669">
+  <title>تموينات الأحمري</title>
+  <style>
+    :root {
+      --primary: #059669;
+      --primary-dark: #047857;
+      --accent: #25d366;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --danger: #ef4444;
+    }
+
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg); margin: 0; padding-bottom: 100px; color: var(--text-main); }
+
+    /* رأس الصفحة الاحترافي */
+    header {
+      background: linear-gradient(135deg, var(--primary), #10b981);
+      color: white;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+    }
+    .brand-title { margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+    .brand-subtitle { font-size: 12px; opacity: 0.9; margin-top: 2px; }
+    .btn-admin-header {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: white;
+      padding: 7px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      backdrop-filter: blur(4px);
+    }
+
+    /* شريط الأقسام السريع */
+    .categories-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 12px 16px;
+      background: var(--card-bg);
+      position: sticky;
+      top: 68px;
+      z-index: 40;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      scrollbar-width: none;
+    }
+    .categories-bar::-webkit-scrollbar { display: none; }
+    .cat-btn {
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 25px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .cat-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
+    }
+
+    .container { max-width: 600px; margin: auto; padding: 16px; }
+
+    /* شبكة المنتجات الأنيقة */
+    .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .product-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.15s ease;
+    }
+    .product-card:active { transform: scale(0.98); }
+    .product-img { width: 100%; height: 130px; object-fit: cover; border-radius: 12px; margin-bottom: 8px; background: #e2e8f0; }
+    .product-tag { font-size: 10px; font-weight: 700; background: #ecfdf5; color: var(--primary-dark); padding: 3px 8px; border-radius: 8px; width: fit-content; margin-bottom: 4px; }
+    .product-title { font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 6px; line-height: 1.3; height: 36px; overflow: hidden; }
+    .product-price { color: var(--primary); font-size: 16px; font-weight: 800; margin-bottom: 8px; }
+    
+    .btn-add-cart {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 9px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* شريط السلة العائم */
+    .cart-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      box-shadow: 0 -4px 15px rgba(0,0,0,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 600px;
+      margin: auto;
+      z-index: 45;
+    }
+    .cart-info-total { font-size: 18px; font-weight: 800; color: var(--primary); }
+    .cart-info-items { font-size: 12px; color: var(--text-muted); }
+    .btn-order-whatsapp {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+    }
+    .btn-order-whatsapp:active { transform: scale(0.97); }
+
+    /* النوافذ المنبثقة التفاعلية */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      z-index: 100;
+      justify-content: center;
+      align-items: flex-end;
+      backdrop-filter: blur(3px);
+    }
+    .modal-sheet {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 550px;
+      border-radius: 24px 24px 0 0;
+      padding: 24px 20px;
+      max-height: 88vh;
+      overflow-y: auto;
+      box-shadow: 0 -10px 25px rgba(0,0,0,0.15);
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .modal-title { margin: 0; font-size: 18px; font-weight: 800; }
+    .btn-close-modal { background: #f1f5f9; border: none; font-size: 16px; border-radius: 50%; width: 34px; height: 34px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+    /* عناصر لوحة التحكم */
+    .admin-section {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .section-headline { font-size: 14px; font-weight: 800; margin-top: 0; margin-bottom: 12px; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
+    .custom-input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 14px;
+      margin-bottom: 10px;
+      outline: none;
+      background: white;
+    }
+    .custom-input:focus { border-color: var(--primary); }
+    .btn-action-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 11px;
+      border-radius: 10px;
+      width: 100%;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* جدول إدارة المنتجات */
+    .admin-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+    .admin-table th, .admin-table td { padding: 10px 8px; border-bottom: 1px solid var(--border); text-align: center; }
+    .admin-table th { color: var(--text-muted); font-weight: 700; background: #f1f5f9; border-radius: 6px; }
+    .btn-tbl { border: none; padding: 6px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .btn-tbl-edit { background: #fef3c7; color: #b45309; }
+    .btn-tbl-del { background: #fee2e2; color: var(--danger); margin-right: 4px; }
+
+    /* التنبيه العائم السريع (Toast) */
+    #toast-msg {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: #1e293b;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 700;
+      z-index: 200;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      white-space: nowrap;
+    }
+    #toast-msg.show { transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- التنبيه العائم -->
+  <div id="toast-msg">رسالة</div>
+
+  <!-- رأس التطبيق -->
+  <header>
+    <div>
+      <div class="brand-title">🛒 تموينات الأحمري</div>
+      <div class="brand-subtitle">خدمة التوصيل السريع</div>
+    </div>
+    <button class="btn-admin-header" onclick="promptAdminLogin()">⚙️ الإدارة</button>
+  </header>
+
+  <!-- شريط الأقسام السريع -->
+  <div class="categories-bar">
+    <button class="cat-btn active" onclick="setCategory('الكل')">الكل</button>
+    <button class="cat-btn" onclick="setCategory('ألبان وأجبان')">🥛 ألبان وأجبان</button>
+    <button class="cat-btn" onclick="setCategory('مخبوزات')">🍞 مخبوزات</button>
+    <button class="cat-btn" onclick="setCategory('مشروبات ومياه')">💧 مشروبات ومياه</button>
+    <button class="cat-btn" onclick="setCategory('معلبات ومؤن')">🥫 معلبات ومؤن</button>
+  </div>
+
+  <div class="container">
+    <div class="products-grid" id="products-list"></div>
+  </div>
+
+  <!-- شريط السلة العائم -->
+  <div class="cart-bar">
+    <div>
+      <div class="cart-info-total"><span id="cart-total">0</span> ر.س</div>
+      <div class="cart-info-items"><span id="cart-count">0</span> أصناف في السلة</div>
+    </div>
+    <button class="btn-order-whatsapp" onclick="sendOrderDirectToDriver()">إرسال الطلب لواتساب 💬</button>
+  </div>
+
+  <!-- نافذة تسجيل دخول الإدارة (أكثر احترافية وأماناً) -->
+  <div class="modal-overlay" id="login-modal">
+    <div class="modal-sheet" style="max-height: 350px;">
+      <div class="modal-header">
+        <h3 class="modal-title">🔐 تسجيل دخول الإدارة</h3>
+        <button class="btn-close-modal" onclick="closeModal('login-modal')">✕</button>
+      </div>
+      <p style="font-size: 13px; color: var(--text-muted); margin-top: -10px;">أدخل الرمز السري للدخول للوحة التحكم:</p>
+      <input type="password" id="admin-pass-input" class="custom-input" placeholder="أدخل الرمز هنا (الافتراضي 1596)">
+      <button class="btn-action-primary" onclick="verifyAdminPassword()">دخول</button>
+    </div>
+  </div>
+
+  <!-- لوحة الإدارة المتكاملة -->
+  <div class="modal-overlay" id="admin-dashboard-modal">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3 class="modal-title">لوحة إدارة تموينات الأحمري</h3>
+        <button class="btn-close-modal" onclick="closeModal('admin-dashboard-modal')">✕</button>
+      </div>
+
+      <!-- 1. إعدادات المتجر: رقم الواتساب وكلمة المرور -->
+      <div class="admin-section">
+        <div class="section-headline">⚙️ إعدادات المتجر الأساسية</div>
+        
+        <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">رقم واتساب عامل التوصيل:</label>
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <input type="text" id="setting-phone" class="custom-input" style="margin-bottom:0;" placeholder="مثال: 966532106173">
+          <button class="btn-action-primary" style="width: 100px;" onclick="saveNewPhone()">حفظ</button>
+        </div>
+
+        <label style="font-size: 12px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">تعديل كلمة مرور الإدارة:</label>
+        <div style="display: flex; gap: 8px;">
+          <input type="password" id="setting-pin" class="custom-input" style="margin-bottom:0;" placeholder="أدخل الرمز الجديد">
+          <button class="btn-action-primary" style="width: 100px; background: #0284c7;" onclick="saveNewPin()">تغيير</button>
+        </div>
+      </div>
+
+      <!-- 2. إضافة منتج جديد -->
+      <div class="admin-section">
+        <div class="section-headline">➕ إضافة منتج جديد</div>
+        <input type="text" id="new-prod-name" class="custom-input" placeholder="اسم المنتج (مثال: لبن المراعي 1 لتر)">
+        <input type="number" id="new-prod-price" class="custom-input" placeholder="السعر بالريال (مثال: 7)">
+        <select id="new-prod-cat" class="custom-input">
+          <option value="ألبان وأجبان">ألبان وأجبان</option>
+          <option value="مخبوزات">مخبوزات</option>
+          <option value="مشروبات ومياه">مشروبات ومياه</option>
+          <option value="معلبات ومؤن">معلبات ومؤن</option>
+        </select>
+        <input type="text" id="new-prod-img" class="custom-input" placeholder="رابط صورة المنتج (اختياري)">
+        <button class="btn-action-primary" onclick="addNewProduct()">إضافة المنتج للمتجر</button>
+      </div>
+
+      <!-- 3. قائمة المنتجات والأسعار -->
+      <div class="admin-section">
+        <div class="section-headline">📦 إدارة وتعديل المنتجات الحالية</div>
+        <div style="max-height: 250px; overflow-y: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>المنتج</th>
+                <th>السعر</th>
+                <th>إجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="admin-products-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // --- 1. إدارة الإعدادات والذاكرة (LocalStorage) ---
+    const DEFAULT_PHONE = "966532106173";
+    const DEFAULT_PIN = "1596";
+
+    let DRIVER_PHONE = localStorage.getItem('alahmari_phone') || DEFAULT_PHONE;
+    let ADMIN_PIN = localStorage.getItem('alahmari_pin') || DEFAULT_PIN;
+
+    const defaultProducts = [
+      { id: 1, name: "حليب المراعي طازج 2 لتر", category: "ألبان وأجبان", price: 14, img: "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300" },
+      { id: 2, name: "جبنة بوك كاسات 500 غرام", category: "ألبان وأجبان", price: 16, img: "https://images.unsplash.com/photo-1589881133595-a3c085cb731d?w=300" },
+      { id: 3, name: "طبق بيض بلدي 30 حبة", category: "ألبان وأجبان", price: 19, img: "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=300" },
+      { id: 4, name: "خبز صامولي طازج كيس", category: "مخبوزات", price: 3, img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300" },
+      { id: 5, name: "كرتون مياه شرب 40 عبوة", category: "مشروبات ومياه", price: 18, img: "https://images.unsplash.com/photo-1548839140-29a749e1bc4e?w=300" },
+      { id: 6, name: "عصير برتقال طازج 1 لتر", category: "مشروبات ومياه", price: 9, img: "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=300" },
+      { id: 7, name: "سكر الأسرة ناعم 5 كجم", category: "معلبات ومؤن", price: 21, img: "https://images.unsplash.com/photo-1581441363689-1f3c3c414635?w=300" },
+      { id: 8, name: "تونة ريو ماري عبوة", category: "معلبات ومؤن", price: 8, img: "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?w=300" }
+    ];
+
+    let products = JSON.parse(localStorage.getItem('alahmari_products_v5')) || defaultProducts;
+    let selectedCategory = "الكل";
+    let cart = [];
+
+    // دالة إظهار تنبيه عائم أنيق
+    function showToast(text) {
+      const toast = document.getElementById('toast-msg');
+      toast.innerText = text;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // حفظ المنتجات في الذاكرة
+    function saveProducts() {
+      localStorage.setItem('alahmari_products_v5', JSON.stringify(products));
+      renderProducts();
+      renderAdminProducts();
+    }
+
+    // --- 2. إدارة العرض والأقسام ---
+    function setCategory(cat) {
+      selectedCategory = cat;
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.innerText.includes(cat) || (cat === 'الكل' && btn.innerText === 'الكل'));
+      });
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const list = document.getElementById('products-list');
+      const filtered = selectedCategory === "الكل" 
+        ? products 
+        : products.filter(p => p.category === selectedCategory);
+
+      if (filtered.length === 0) {
+        list.innerHTML = `<p style="grid-column: span 2; text-align: center; color: var(--text-muted); padding: 30px;">لا توجد منتجات في هذا القسم.</p>`;
+        return;
+      }
+
+      list.innerHTML = filtered.map(p => `
+        <div class="product-card">
+          <img class="product-img" src="${p.img || 'https://via.placeholder.com/200?text=تموينات+الأحمري'}" alt="${p.name}" loading="lazy">
+          <span class="product-tag">${p.category || 'عام'}</span>
+          <div class="product-title">${p.name}</div>
+          <div class="product-price">${p.price} ر.س</div>
+          <button class="btn-add-cart" onclick="addToCart(${p.id})">
+            <span>+</span> إضافة للسلة
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // --- 3. إدارة السلة ---
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      const item = cart.find(i => i.id === id);
+      if (item) {
+        item.qty++;
+      } else {
+        cart.push({ ...product, qty: 1 });
+      }
+      updateCartUI();
+      showToast(`تمت إضافة ${product.name} ✅`);
+    }
+
+    function updateCartUI() {
+      const count = cart.reduce((sum, item) => sum + item.qty, 0);
+      const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      document.getElementById('cart-count').innerText = count;
+      document.getElementById('cart-total').innerText = total;
+    }
+
+    // --- 4. إرسال الطلب عبر الواتساب مباشرة دون صفحات ويب ---
+    function sendOrderDirectToDriver() {
+      if (cart.length === 0) {
+        showToast('السلة فارغة! اختر منتجاتك أولاً.');
+        return;
+      }
+
+      let msg = `🛒 *طلب توصيل جديد - تموينات الأحمري*\n`;
+      msg += `━━━━━━━━━━━━━━━━━━━\n`;
+      msg += `📦 *الطلبات المطلوبة:*\n`;
+
+      let total = 0;
+      cart.forEach((item, index) => {
+        const itemTotal = item.price * item.qty;
+        total += itemTotal;
+        msg += `${index + 1}. ${item.name} | عدد (${item.qty}) = ${itemTotal} ر.س\n`;
+      });
+
+      msg += `━━━━━━━━━━━━━━━━━━━\n`;
+      msg += `💰 *المجموع المطلوب تحصيله:* ${total} ر.س\n`;
+      msg += `*(الدفع عند الاستلام)*`;
+
+      const encodedMsg = encodeURIComponent(msg);
+      
+      // فتح تطبيق واتساب مباشرة بدون Webview
+      const directAppURL = `whatsapp://send?phone=${DRIVER_PHONE}&text=${encodedMsg}`;
+
+      const trigger = document.createElement('a');
+      trigger.href = directAppURL;
+      document.body.appendChild(trigger);
+      trigger.click();
+      document.body.removeChild(trigger);
+    }
+
+    // --- 5. إدارة النوافذ ولوحة التحكم ---
+    function promptAdminLogin() {
+      document.getElementById('admin-pass-input').value = '';
+      openModal('login-modal');
+    }
+
+    function verifyAdminPassword() {
+      const entered = document.getElementById('admin-pass-input').value.trim();
+      if (entered === ADMIN_PIN) {
+        closeModal('login-modal');
+        openAdminDashboard();
+      } else {
+        showToast('❌ الرمز السري غير صحيح!');
+      }
+    }
+
+    function openAdminDashboard() {
+      document.getElementById('setting-phone').value = DRIVER_PHONE;
+      document.getElementById('setting-pin').value = '';
+      renderAdminProducts();
+      openModal('admin-dashboard-modal');
+    }
+
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    // تعديل رقم واتساب السائق
+    function saveNewPhone() {
+      let phone = document.getElementById('setting-phone').value.trim();
+      // تنظيف الرقم من المسافات وعلامات الزائد والأصفار المزدوجة
+      phone = phone.replace(/[^0-9]/g, '');
+      if (phone.startsWith('00')) phone = phone.substring(2);
+
+      if (phone.length < 8) {
+        showToast('يرجى إدخال رقم صحيح مع مفتاح الدولة!');
+        return;
+      }
+
+      DRIVER_PHONE = phone;
+      localStorage.setItem('alahmari_phone', DRIVER_PHONE);
+      showToast('تم تحديث رقم واتساب السائق بنجاح ✅');
+    }
+
+    // تعديل كلمة المرور / الرمز السري
+    function saveNewPin() {
+      const newPin = document.getElementById('setting-pin').value.trim();
+      if (newPin.length < 4) {
+        showToast('كلمة المرور يجب أن تكون 4 أرقام أو حروف على الأقل!');
+        return;
+      }
+
+      ADMIN_PIN = newPin;
+      localStorage.setItem('alahmari_pin', ADMIN_PIN);
+      document.getElementById('setting-pin').value = '';
+      showToast('تم تغيير كلمة المرور بنجاح ✅');
+    }
+
+    // إضافة منتج جديد
+    function addNewProduct() {
+      const name = document.getElementById('new-prod-name').value.trim();
+      const price = parseFloat(document.getElementById('new-prod-price').value);
+      const cat = document.getElementById('new-prod-cat').value;
+      const img = document.getElementById('new-prod-img').value.trim();
+
+      if (!name || isNaN(price) || price <= 0) {
+        showToast('يرجى كتابة الاسم والسعر بشكل صحيح!');
+        return;
+      }
+
+      products.push({
+        id: Date.now(),
+        name: name,
+        category: cat,
+        price: price,
+        img: img || 'https://via.placeholder.com/300?text=تموينات+الأحمري'
+      });
+
+      saveProducts();
+      document.getElementById('new-prod-name').value = '';
+      document.getElementById('new-prod-price').value = '';
+      document.getElementById('new-prod-img').value = '';
+      showToast('تمت إضافة المنتج بنجاح ✅');
+    }
+
+    // عرض جدول المنتجات بالإدارة
+    function renderAdminProducts() {
+      const tbody = document.getElementById('admin-products-tbody');
+      tbody.innerHTML = products.map(p => `
+        <tr>
+          <td style="text-align: right; font-weight:700;">${p.name}</td>
+          <td><b>${p.price} ر.س</b></td>
+          <td>
+            <button class="btn-tbl btn-tbl-edit" onclick="editProductPrice(${p.id})">تعديل السعر</button>
+            <button class="btn-tbl btn-tbl-del" onclick="deleteProduct(${p.id})">حذف</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // تعديل السعر
+    function editProductPrice(id) {
+      const product = products.find(p => p.id === id);
+      const newPrice = prompt(`تعديل سعر (${product.name}):`, product.price);
+      if (newPrice !== null && !isNaN(newPrice) && parseFloat(newPrice) > 0) {
+        product.price = parseFloat(newPrice);
+        saveProducts();
+        showToast('تم تحديث السعر بنجاح ✅');
+      }
+    }
+
+    // حذف منتج
+    function deleteProduct(id) {
+      const product = products.find(p => p.id === id);
+      if (confirm(`هل أنت متأكد من حذف (${product.name})؟`)) {
+        products = products.filter(p => p.id !== id);
+        saveProducts();
+        showToast('تم حذف المنتج 🗑️');
+      }
+    }
+
+    // تشغيل الصفحة
+    renderProducts();
+  </script>
+</body>
+</html>
